@@ -1,0 +1,35 @@
+BAI 07 - Verification: PR co loi cố ý
+=====================================
+
+Yeu cau de bai: tao mot PR voi loi Checkstyle co tinh, xac nhan Bot tu dong
+binh luan vao PR va nut Merge bi khoa cho den khi loi duoc sua.
+
+Kich ban da test:
+
+1) Tao branch feature/bad-style tu main, sua Hello.java cho vi pham
+   Google Java Style:
+       public static String Greet(String NAME) {       // ten ham viet hoa
+         return "Hello, "+NAME+"!"     ;                // thieu space, thua space
+       }
+
+2) Tao Pull Request feature/bad-style -> main.
+
+3) Workflow tu dong chay (on: pull_request branches: [main]):
+   - Step "Run Checkstyle" sinh checkstyle-result.xml.
+   - Step "Inline checkstyle review" goi dbelyaev/action-checkstyle@v1
+     dang inline comment len cac dong vi pham.
+
+4) Quan sat tren tab Files changed cua PR:
+   - Comment cua bot xuat hien ngay duoi cac dong sai:
+       "Method name 'Greet' must match pattern '^[a-z][a-zA-Z0-9]*$'."
+       "WhitespaceAround: '+' is not preceded with whitespace."
+
+5) Status check "style-and-test" ket qua FAILURE -> Branch Protection Rule
+   khoa nut Merge ("Required statuses must pass before merging").
+
+6) Sua loi (rename Greet -> greet, them space) va push lai cung branch.
+   - Workflow chay lai, status check chuyen sang SUCCESS.
+   - Nut Merge tro lai trang thai active.
+
+Ket luan: Bot tu dong binh luan dung dong vi pham; Branch Protection chan
+duoc merge khi co loi format hoac test fail.

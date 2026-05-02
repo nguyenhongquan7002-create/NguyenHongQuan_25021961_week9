@@ -1,0 +1,26 @@
+BAI 03 - Chung minh kha nang debug qua execution logs
+=====================================================
+
+Yeu cau de bai: kiem thu su tu dong hoa bang cach co tinh gay loi build va
+chung minh kha nang debug van de bang execution logs cua GitHub Actions.
+
+Kich ban da test:
+- Ban dau pipeline xanh (3 test pass).
+- Sua co tinh CalculatorTest:
+    assertEquals(99, c.add(3, 4));   // ky vong 99 nhung thuc te = 7
+- Push len -> tab Actions hien job do.
+
+Doc log de debug:
+- Mo run -> step "Build with Maven" -> log hien:
+    [ERROR] Failures:
+    [ERROR]   CalculatorTest.testAdd:14 expected: <99> but was: <7>
+    [ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0
+- Tu doan log nay xac dinh duoc: file = CalculatorTest, dong 14, kieu loi
+  = Failure (assertion sai), gia tri thuc te = 7.
+
+Cach sua:
+- Tinh lai ky vong dung: 3 + 4 = 7 -> sua assertEquals(7, c.add(3, 4)).
+- Push lai -> pipeline xanh.
+
+Ket luan: log GitHub Actions du chi tiet de debug ma khong can chay lai
+local. Quy trinh: doc log -> xac dinh dong sai -> sua -> push.

@@ -1,0 +1,32 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven build output (giu lai theo yeu cau bai mau - nen KHONG ignore)
+# target/
+
+# Logs run-time
+*.log
+logs/
+
+# Maven cache
+.mvn/
+
+# PDF tong ket - chi giu local
+TONGKET_TUAN9.pdf

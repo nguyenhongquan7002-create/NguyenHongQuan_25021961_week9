@@ -1,0 +1,33 @@
+BAI 09 - Xac minh logging chuyen nghiep
+=======================================
+
+Bai khong yeu cau giai thich tu luan, chi yeu cau xac minh "log dong duoc
+dinh dang chinh xac (bao gom thoi gian va muc do log) trong ca console va
+tep log".
+
+Cac diem da thoa man yeu cau:
+1) Bo het System.out.println - OrderService chi dung Logger.
+2) SLF4J + Logback voi 2 muc do:
+       INFO  - moc tinh tong, ket qua thanh cong.
+       ERROR - khi nem IllegalArgumentException do input sai.
+3) Parameterized logging "{}":
+       LOG.info("tinh tong qty={} price={}", qty, price);
+   thay vi cong chuoi "+":
+       LOG.info("tinh tong qty=" + qty + " price=" + price);
+   -> chi format khi level duoc bat, tiet kiem CPU.
+4) FileAppender trong logback.xml ghi vat ly ra logs/app.log.
+
+Xac minh "mvn test" - log dung dinh dang trong ca console va file:
+
+Console output (STDOUT appender):
+    2026-05-07 23:33:45.123 [main] INFO  org.OrderService - tinh tong qty=3 price=20.0
+    2026-05-07 23:33:45.124 [main] INFO  org.OrderService - ket qua tong=60.0
+    2026-05-07 23:33:45.125 [main] ERROR org.OrderService - input khong hop le qty=0 price=10.0
+
+File logs/app.log (FILE appender):
+    2026-05-07 23:33:45.123 INFO  org.OrderService - tinh tong qty=3 price=20.0
+    2026-05-07 23:33:45.124 INFO  org.OrderService - ket qua tong=60.0
+    2026-05-07 23:33:45.125 ERROR org.OrderService - input khong hop le qty=0 price=10.0
+
+Moi dong deu co: thoi gian (yyyy-MM-dd HH:mm:ss.SSS), muc do log
+(INFO/ERROR), ten logger (org.OrderService) va noi dung message.

@@ -1,0 +1,22 @@
+BAI 02 - Giai thich ly do chon log level va diem du lieu
+========================================================
+
+Yeu cau de bai: theo doi he thong qua logging va giai thich ly do chon cac
+cap do log + cac diem du lieu duoc ghi.
+
+Ly do chon log level:
+- INFO duoc dung cho cac moc binh thuong cua nghiep vu: tao tai khoan moi,
+  nap thanh cong, rut thanh cong. Day la su kien dang tin de truy vet luong
+  giao dich, khong phai loi.
+- WARN duoc dung cho input bat thuong nhung he thong tu xu ly duoc:
+  rut qua so du, nap so tien <= 0. He thong tra ve false / khong thay doi
+  trang thai - khong nem exception, nen khong dung ERROR.
+- ERROR khong duoc dung trong bai vi chua co exception thuc su xay ra. Neu
+  sau nay co thao tac DB fail hay ngoai le runtime, se dung ERROR.
+
+Diem du lieu chon ghi:
+- accountNumber: dinh danh giao dich thuoc tai khoan nao (de filter log).
+- amount: so tien thao tac, can de truy vet so chenh lech khi co tranh chap.
+- balance: so du sau / truoc thao tac, giup tai cau hinh trang thai.
+KHONG ghi PIN, password, CCCD, OTP - day la du lieu nhay cam, vi pham PCI-DSS
+va co the lo qua log file.

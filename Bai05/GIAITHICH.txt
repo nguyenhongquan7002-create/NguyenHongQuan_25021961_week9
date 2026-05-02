@@ -1,0 +1,19 @@
+BAI 05 - Cau hinh JaCoCo va rule >= 80%
+=======================================
+
+Bai khong yeu cau giai thich tu luan, chi yeu cau cau hinh. Cac diem cau hinh
+da lam:
+
+1) Tich hop jacoco-maven-plugin trong pom.xml.
+2) Rule strict trong execution "check":
+       <element>BUNDLE</element>
+       <counter>LINE</counter>
+       <value>COVEREDRATIO</value>
+       <minimum>0.80</minimum>
+   -> build fail neu line coverage < 80%.
+3) Rule chay o pha verify -> workflow goi "mvn -B clean verify" tu kich hoat.
+4) actions/upload-artifact luu thu muc target/site/jacoco/ (chua index.html)
+   sau khi build, dung if: always() de luu ca khi fail (tien debug).
+
+Coverage thuc te: 5 test bao phu het cac nhanh cua isPalindrome va reverse
+-> > 90%, qua nguong 80%.

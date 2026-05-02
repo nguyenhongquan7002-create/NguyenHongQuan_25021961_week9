@@ -1,0 +1,95 @@
+BAI 10 - Tim va sua loi pipeline
+================================
+
+Yeu cau de bai: voi moi loi -> chi file/dong, sao chep doan log Actions,
+giai thich nguyen nhan ky thuat, sua va push lai.
+
+============================================
+LOI 1 - logback-classic version 9.9.9
+============================================
+File:  pom.xml dong 121
+Doan: <version>9.9.9</version>
+
+Log GitHub Actions:
+    [ERROR] Failed to execute goal on project shipping-app: Could not resolve
+    dependencies for project com.lab:shipping-app:jar:1.0-SNAPSHOT:
+    The following artifacts could not be resolved:
+    ch.qos.logback:logback-classic:jar:9.9.9
+    Could not find artifact ch.qos.logback:logback-classic:jar:9.9.9
+    in central (https://repo.maven.apache.org/maven2)
+
+Nguyen nhan ky thuat:
+ch.qos.logback chi co cac dong 1.x va 1.4.x tren Maven Central. Phien ban
+"9.9.9" la version ao, khong ton tai. Maven dung pha resolve dependencies
+truoc khi compile -> build do ngay.
+
+Sua: <version>1.4.11</version>.
+
+============================================
+LOI 2 - maven-surefire-plugin 2.12.4
+============================================
+File:  pom.xml dong 137
+Doan: <version>2.12.4</version>
+
+Log GitHub Actions:
+    [INFO] --- maven-surefire-plugin:2.12.4:test ---
+    [INFO]
+    [INFO] -------------------------------------------------------
+    [INFO]  T E S T S
+    [INFO] -------------------------------------------------------
+    [INFO]
+    [INFO] Tests run: 0, Failures: 0, Errors: 0, Skipped: 0
+    [INFO] No tests to run.
+
+Nguyen nhan ky thuat:
+maven-surefire-plugin 2.12.4 (phat hanh 2013) chi co provider cho JUnit 3/4.
+JUnit 5 (Jupiter) dung kien truc moi voi JUnit Platform - can surefire >=
+2.22.0 (khuyen 3.x) de discover engine junit-jupiter-engine. Surefire cu
+quet xong, khong tim duoc test runner cho JUnit 5 -> "No tests to run"
+nhung khong fail build (sai logic, test khong chay nhung pipeline van xanh).
+
+Sua: bo plugin (Maven moi default surefire 3.x) hoac pin <version>3.1.2</version>.
+
+============================================
+LOI 3 - thieu maven.compiler.source/target
+============================================
+File:  pom.xml - khong co <properties> hoac thieu cau hinh compiler.
+
+Log GitHub Actions:
+    [ERROR] Source option 5 is no longer supported. Use 7 or later.
+    [ERROR] Target option 1.5 is no longer supported. Use 7 or later.
+
+Nguyen nhan ky thuat:
+Khi pom.xml khong khai bao maven.compiler.source/target, maven-compiler-plugin
+mac dinh dung Java 1.5 (legacy). Java 1.5 khong duoc Java 17+ runtime ho tro
+nua -> javac trong setup-java JDK 21 tu choi compile.
+
+Sua: them vao <properties>:
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
+
+============================================
+LOI 4 - TU NGHI THEM (sau khi pipeline xanh)
+============================================
+File:  src/test/java/com/lab/ShippingCalculatorTest.java
+
+Sua co tinh dong test express:
+    assertEquals(99999.0, calc.calculate(5, "EXPRESS"));   // sai
+
+Push len -> pipeline DO.
+
+Log:
+    [ERROR] Failures:
+    [ERROR]   ShippingCalculatorTest.testExpress:23
+    expected: <99999.0> but was: <45000.0>
+    [ERROR] Tests run: 4, Failures: 1, Errors: 0
+
+Nguyen nhan ky thuat:
+Cong thuc EXPRESS la weight*5000 + 20000. Voi weight=5: 5*5000 + 20000 = 45000.
+Test ky vong 99999 - khong khop ket qua thuc te. Day la "test sai" (test la
+dac ta, neu test sai thi dac ta sai), khong phai code sai.
+
+Loi nay khong trung 3 loi tren: khong lien quan dependency, plugin, hay
+compiler version. Day la failure tang test (test failure) thuan tuy.
+
+Sua: assertEquals(45000.0, ...). Push lai -> xanh.

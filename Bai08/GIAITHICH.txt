@@ -1,0 +1,36 @@
+BAI 08 - Y nghia thu muc target va pha package
+==============================================
+
+Yeu cau de bai: chung minh ung dung chay duoc qua "java -jar target/*.jar"
+va giai thich y nghia cua thu muc target va pha package.
+
+Xac minh chay duoc:
+    cd src
+    mvn clean package
+    java -jar target/StandaloneApp-1.0-SNAPSHOT.jar hello world
+Output:
+    Standalone JAR chay thanh cong!
+    Tham so: [hello, world]
+
+Y nghia thu muc target:
+- target/ la noi Maven sinh ra moi output cua build (theo convention).
+- Cau truc ben trong target/:
+    target/classes/         <- bytecode .class cua main code
+    target/test-classes/    <- bytecode .class cua test code
+    target/maven-status/    <- metadata Maven dung de incremental build
+    target/surefire-reports/<- bao cao test cua maven-surefire-plugin
+    target/*.jar            <- artefact cuoi cua pha package
+- "mvn clean" xoa toan bo target/ -> dam bao build "tu dau".
+- target/ thuong duoc git ignore vi noi dung tai tao duoc tu source.
+
+Y nghia pha package:
+- package la pha thu 4 trong build lifecycle (validate -> compile -> test
+  -> package -> install -> deploy).
+- O pha nay, Maven dong goi class va resource thanh artefact theo packaging
+  trong pom.xml: jar / war / ear.
+- Vi packaging mac dinh la "jar", maven-jar-plugin chay tao file .jar trong
+  target/. Voi cau hinh <mainClass> trong manifest, file .jar nay tro thanh
+  executable - JVM doc Main-Class tu META-INF/MANIFEST.MF khi chay
+  "java -jar".
+- Theo lifecycle, goi mvn package se chay tu dong validate + compile + test
+  truoc do; neu test fail thi khong tao .jar.

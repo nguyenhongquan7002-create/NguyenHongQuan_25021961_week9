@@ -1,0 +1,20 @@
+BAI 01 - Giai thich giai phap
+=============================
+
+Yeu cau de bai: nang cap pom.xml legacy, them Logback 1.4.11, Hibernate Core
+6.2.0.Final, chuyen sang JUnit Jupiter 5.9.2, giai quyet xung dot.
+
+Giai phap:
+1) Logback Classic 1.4.11: them dependency vao <dependencies>. Logback-classic
+   keo theo slf4j-api (transitive) -> goi LoggerFactory.getLogger(...) duoc
+   ngay, thay the System.out.println.
+2) Hibernate Core 6.2.0.Final: them dependency. Phien ban 6.x dung jakarta.*
+   (khong con javax.*), tuong thich Java 17+.
+3) JUnit Jupiter 5.9.2: tach 2 artifact junit-jupiter-api (annotation va
+   assertion) + junit-jupiter-engine (runtime cho JUnit Platform discover).
+   Ca hai dat scope=test.
+
+Xung dot da xu ly:
+- JUnit 4 cu (neu co trong pom legacy) bo di vi khong tuong thich JUnit 5.
+- maven-surefire-plugin phien ban < 2.22 khong nhan dien JUnit 5 -> dung
+  Maven moi (default surefire 3.x), khong khai bao plugin trong pom.

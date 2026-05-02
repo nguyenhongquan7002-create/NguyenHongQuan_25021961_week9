@@ -1,0 +1,20 @@
+BAI 04 - Refactor cho cross-platform
+====================================
+
+Yeu cau de bai: co tinh tao Unit Test xu ly path bang dau cung Windows hoac
+Linux, quan sat loi tren OS khong tuong thich, sau do refactor bang
+File.separator hoac java.nio.file.Path.
+
+Loi co tinh tao truoc khi sua:
+- Test viet:  assertEquals("logs/app.log", path.toString());
+- Tren Linux/macOS: PASS (separator '/').
+- Tren Windows: FAIL - thuc te tra ve "logs\\app.log".
+  Log: expected: <"logs/app.log"> but was: <"logs\app.log">
+
+Refactor da ap dung:
+- Code chinh dung Paths.get("logs", "app.log") thay vi noi chuoi tay
+  -> JVM tu chon separator phu hop voi OS.
+- Test dung Path.endsWith(Path.of("logs", "app.log")) thay vi so chuoi
+  -> ket qua dung tren ca 3 OS trong matrix (ubuntu, windows, macos).
+
+Sau khi refactor: 3 job trong matrix deu xanh.
